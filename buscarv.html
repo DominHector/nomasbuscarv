@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        h1 {
+            width: 100%;
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        .columns {
+            max-width: 1200px;
+            margin: auto;
+        }
+        textarea {
+            width: 100%;
+            min-height: 600px;
+            padding: 6px;
+        }
+        #total-counter {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>No más buscarv</h1>
+
+    <form id="form-buscarv">
+        <div class="row columns">
+            <div class="col-lg-3">
+                <label for="first-col">COLUMNA 1</label>
+                <textarea type="text" id="first-col" name="first-col"></textarea>
+            </div>
+            
+            <div class="col-lg-3">
+                <label for="second-col">COLUMNA 2</label>
+                <textarea type="text" id="second-col" name="second-col"></textarea>
+            </div>
+            
+            <div class="col-lg-3">
+                <label for="results-col">COINCIDEN</label>
+                <textarea type="text" id="results-col" name="results-col"></textarea>
+                <div id="results-counter"></div>
+            </div>
+            
+            
+            <div class="col-lg-3">
+                <label for="results-col">NO COINCIDEN</label>
+                <textarea type="text" id="not-results-col" name="results-col"></textarea>
+                <div id="not-results-counter"></div>
+            </div>
+
+            <div id="total-counter" class="col-lg-12"></div>
+
+        </div>
+    </form>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+
+<script>
+    (function ($) {
+
+        $('#form-buscarv').on('change, click, keyup', function() {
+            var first_col = $('#first-col').val().replace(/\n/g, ' ');
+            var second_col = $('#second-col').val().split('\n');  
+            var results_col = $('#results-col');
+            var not_results_col = $('#not-results-col');
+            var results_counter = $('#results-counter');
+            var not_results_counter = $('#not-results-counter');
+            var total_counter = $('#total-counter');
+            
+            results_col.html(''); 
+            not_results_col.html(''); 
+
+            var aux_arr_matchs = [];
+            var aux_arr_not_matchs = [];
+
+            second_col.forEach(element => {
+                if(element.length) {
+                    if(first_col.includes(element)) {
+                        aux_arr_matchs.push(element);
+                    } else {
+                        aux_arr_not_matchs.push(element);
+                    }
+                }
+            });
+
+
+            first_col.split(' ').forEach(element => {
+                if(element.length) {
+                    if(second_col.includes(element)) {
+                        aux_arr_matchs.push(element);
+                    } else {
+                        aux_arr_not_matchs.push(element);
+                    }
+                }
+            });
+
+            aux_arr_matchs = aux_arr_matchs.filter(function(item, pos) {
+                return aux_arr_matchs.indexOf(item) == pos;
+            });
+
+            aux_arr_not_matchs = aux_arr_not_matchs.filter(function(item, pos) {
+                return aux_arr_not_matchs.indexOf(item) == pos;
+            });
+
+            results_counter.html(aux_arr_matchs.length);
+            not_results_counter.html(aux_arr_not_matchs.length);
+            total_counter.html('Total: ' + (aux_arr_matchs.length + aux_arr_not_matchs.length)); 
+
+            results_col.val(aux_arr_matchs.join('\n'));
+            not_results_col.val(aux_arr_not_matchs.join('\n')); 
+
+        });
+ 
+    }(jQuery));
+
+</script>
+</html>
